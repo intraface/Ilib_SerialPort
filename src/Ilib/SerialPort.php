@@ -445,10 +445,15 @@ class Ilib_SerialPort
 
             return $content;
         } elseif ($this->_os === "windows") {
-            /* Do nohting : not implented yet */
+            /* So fare only implemented without possible to set count. */
+            $content = ''; $i = 0;
+            do {
+                $content .= fread($this->_dHandle, 128);
+            } while (($i += 128) === strlen($content));
+            
+            return $content;
         }
 
-        trigger_error("Reading serial port is not implemented for Windows", E_USER_WARNING);
         return false;
     }
 
