@@ -7,18 +7,32 @@
  *
  * PHP version 5
  *
+ * @package Ilib_SerialPort
  * @author Lars Olesen <lars@legestue.net>
  * @author Rémy Sanchez <thenux@gmail.com>
  *
  * @copyright under GPL 2 licence
  */
+
+/**
+ * @var const SERIAL_DEVICE_NOTSET
+ */
 define("SERIAL_DEVICE_NOTSET", 0);
+
+/**
+ * @var const SERIAL_DEVICE_SET
+ */
 define("SERIAL_DEVICE_SET", 1);
+
+/**
+ * @var const SERIAL_DEVICE_OPENED
+ */
 define("SERIAL_DEVICE_OPENED", 2);
 
 /**
  * Serial port control class
  *
+ * @package Ilib_SerialPort
  * @author Lars Olesen <lars@legestue.net>
  * @author Rémy Sanchez <thenux@gmail.com>
  *
@@ -415,7 +429,7 @@ class Ilib_SerialPort
     /**
      * Reads the port until no new datas are availible, then return the content.
      *
-     * @pararm int $count number of characters to be read (will stop before
+     * @param int $count number of characters to be read (will stop before
      *  if less characters are in the buffer)
      * @return string
      */
@@ -477,7 +491,10 @@ class Ilib_SerialPort
             return false;
         }
     }
-
+    
+    /**
+     * Checks if serial port is opened
+     */
     private function _ckOpened()
     {
         if ($this->_dState !== SERIAL_DEVICE_OPENED) {
@@ -488,6 +505,9 @@ class Ilib_SerialPort
         return true;
     }
 
+    /**
+     * Checks if serialport is closed
+     */
     private function _ckClosed()
     {
         if ($this->_dState !== SERIAL_DEVICE_CLOSED) {
@@ -498,6 +518,9 @@ class Ilib_SerialPort
         return true;
     }
 
+    /**
+     * Executes commands
+     */
     private function _exec($cmd, &$out = null)
     {
         $desc = array(
