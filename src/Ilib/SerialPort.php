@@ -464,7 +464,7 @@ class Ilib_SerialPort
             do {
                 $content .= fread($this->_dHandle, 128);
             } while (($i += 128) === strlen($content));
-            
+
             return $content;
         }
 
@@ -491,7 +491,7 @@ class Ilib_SerialPort
             return false;
         }
     }
-    
+
     /**
      * Checks if serial port is opened
      */
