@@ -3,15 +3,15 @@
  * Serial port control class
  *
  * Port to PHP5 of phpSerial found on http://www.phpclasses.org/browse/file/17926.html
- * authored by Rémy Sanchez <thenux@gmail.com>.
+ * authored by RÃ©my Sanchez <thenux@gmail.com>.
  *
  * PHP version 5
  *
- * @package Ilib_SerialPort
- * @author Lars Olesen <lars@legestue.net>
- * @author Rémy Sanchez <thenux@gmail.com>
- *
- * @copyright under GPL 2 licence
+ * @package   Ilib_SerialPort
+ * @author    RÃ©my Sanchez <thenux@gmail.com>
+ * @author    Lars Olesen <lars@legestue.net>
+ * @copyright GPL 2 licence
+ * @link
  */
 
 /**
@@ -33,26 +33,25 @@ define("SERIAL_DEVICE_OPENED", 2);
  * Serial port control class
  *
  * @package Ilib_SerialPort
+ * @author RÃ©my Sanchez <thenux@gmail.com>
  * @author Lars Olesen <lars@legestue.net>
- * @author Rémy Sanchez <thenux@gmail.com>
- *
  * @copyright under GPL 2 licence
  */
 class Ilib_SerialPort
 {
-    private $_device = null;
-    private $_windevice = null;
-    private $_dHandle = null;
-    private $_dState = SERIAL_DEVICE_NOTSET;
-    private $_buffer = "";
-    private $_os = "";
+    protected $_device = null;
+    protected $_windevice = null;
+    protected $_dHandle = null;
+    protected $_dState = SERIAL_DEVICE_NOTSET;
+    protected $_buffer = "";
+    protected $_os = "";
 
     /**
      * This var says if buffer should be flushed by sendMessage (true) or manualy (false)
      *
      * @var bool
      */
-    private $autoflush = true;
+    protected $autoflush = true;
 
     /**
      * Constructor. Perform some checks about the OS and setserial
@@ -507,8 +506,10 @@ class Ilib_SerialPort
 
     /**
      * Checks if serialport is closed
+     *
+     * @return boolean
      */
-    private function _ckClosed()
+    protected function _ckClosed()
     {
         if ($this->_dState !== SERIAL_DEVICE_CLOSED) {
             trigger_error("Device must be closed", E_USER_WARNING);
@@ -520,8 +521,10 @@ class Ilib_SerialPort
 
     /**
      * Executes commands
+     *
+     * @return boolean
      */
-    private function _exec($cmd, &$out = null)
+    protected function _exec($cmd, &$out = null)
     {
         $desc = array(
             1 => array("pipe", "w"),
