@@ -1,25 +1,20 @@
 <?php
-
-
-/* Simple serial relay script for turning my sprinkler system on
-and off from the web!
-
-Utilizes the PHP Serial class by Rémy Sanchez <thenux@gmail.com>
-(Thanks you rule!!) to communicate with the QK108/CK1610
-serial relay board!
-
-*/
-
+/**
+ *  Simple serial relay script for turning my sprinkler system on and off from the web!
+ *
+ * Utilizes the PHP Serial class by RÃ©my Sanchez <thenux@gmail.com>
+ * (Thanks you rule!!) to communicate with the QK108/CK1610 serial relay board!
+ */
 
 //check the GET action var to see if an action is to be performed
 if (isset($_GET['action'])) {
     //Action required
 
     //Load the serial port class
-    require("php_serial.class.php");
+    require("../src/Ilib/SerialPort.php");
 
     //Initialize the class
-    $serial = new phpSerial();
+    $serial = new Ilib_SerialPort();
 
     //Specify the serial port to use... in this case COM1
     $serial->deviceSet("COM1");
