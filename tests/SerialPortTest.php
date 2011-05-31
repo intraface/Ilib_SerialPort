@@ -14,7 +14,6 @@
  * @version   @package-version@
  * @link      http://public.intraface.dk
  */
-require_once 'PHPUnit/Framework.php';
 require_once dirname(__FILE__) . '/../src//Ilib/SerialPort.php';
 
 /**
@@ -41,6 +40,4 @@ class SerialPortTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(is_object($this->port));
     }
-    
-    
 }
