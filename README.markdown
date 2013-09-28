@@ -1,7 +1,7 @@
 Communicate with a serial port from PHP
 ==
 
-This is a PHP Version 5 port of [phpSerial](http://www.phpclasses.org/package/3679-PHP-Communicate-with-a-serial-port.html) written by Rémy Sanchez.
+This is a PHP Version 5 port of [phpSerial](http://www.phpclasses.org/package/3679-PHP-Communicate-with-a-serial-port.html) written by Rémy Sanchez. The original code can also be found at [Google Code](http://code.google.com/p/php-serial/).
 
 Introduction
 --
