@@ -480,20 +480,6 @@ class Ilib_SerialPort
     }
 
     /**
-     * Checks if serialport is closed
-     *
-     * @return boolean
-     */
-    protected function _ckClosed()
-    {
-        if ($this->_dState !== SERIAL_DEVICE_CLOSED) {
-            throw new Exception("Device must be closed");
-        }
-
-        return true;
-    }
-
-    /**
      * Executes commands
      *
      * @return boolean
