@@ -15,21 +15,6 @@
  */
 
 /**
- * @var const SERIAL_DEVICE_NOTSET
- */
-define("SERIAL_DEVICE_NOTSET", 0);
-
-/**
- * @var const SERIAL_DEVICE_SET
- */
-define("SERIAL_DEVICE_SET", 1);
-
-/**
- * @var const SERIAL_DEVICE_OPENED
- */
-define("SERIAL_DEVICE_OPENED", 2);
-
-/**
  * Serial port control class
  *
  * @package Ilib_SerialPort
@@ -39,10 +24,25 @@ define("SERIAL_DEVICE_OPENED", 2);
  */
 class Ilib_SerialPort
 {
+    /**
+     * @var const SERIAL_DEVICE_NOTSET
+     */
+    const SERIAL_DEVICE_NOTSET = 0;
+
+    /**
+     * @var const SERIAL_DEVICE_SET
+     */
+    const SERIAL_DEVICE_SET = 1;
+
+    /**
+     * @var const SERIAL_DEVICE_OPENED
+     */
+    const SERIAL_DEVICE_OPENED = 2;
+
     protected $_device = null;
     protected $_windevice = null;
     protected $_dHandle = null;
-    protected $_dState = SERIAL_DEVICE_NOTSET;
+    protected $_dState = self::SERIAL_DEVICE_NOTSET;
     protected $_buffer = "";
     protected $_os = "";
 
@@ -92,7 +92,7 @@ class Ilib_SerialPort
      */
     public function deviceSet($device)
     {
-        if ($this->_dState !== SERIAL_DEVICE_OPENED) {
+        if ($this->_dState !== self::SERIAL_DEVICE_OPENED) {
             if ($this->_os === "linux") {
                 if (preg_match("@^COM(\d+):?$@i", $device, $matches)) {
                     $device = "/dev/ttyS" . ($matches[1] - 1);
@@ -100,14 +100,14 @@ class Ilib_SerialPort
 
                 if ($this->_exec("stty -F " . $device) === 0) {
                     $this->_device = $device;
-                    $this->_dState = SERIAL_DEVICE_SET;
+                    $this->_dState = self::SERIAL_DEVICE_SET;
                     return true;
                 }
             } elseif ($this->_os === "windows") {
                 if (preg_match("@^COM(\d+):?$@i", $device, $matches) and $this->_exec(exec("mode " . $device)) === 0) {
                     $this->_windevice = "COM" . $matches[1];
                     $this->_device = "\\.\com" . $matches[1];
-                    $this->_dState = SERIAL_DEVICE_SET;
+                    $this->_dState = self::SERIAL_DEVICE_SET;
                     return true;
                 }
             }
@@ -127,11 +127,11 @@ class Ilib_SerialPort
      */
     public function deviceOpen($mode = "r+b")
     {
-        if ($this->_dState === SERIAL_DEVICE_OPENED) {
+        if ($this->_dState === self::SERIAL_DEVICE_OPENED) {
             throw new Exeption("The device is already opened");
         }
 
-        if ($this->_dState === SERIAL_DEVICE_NOTSET) {
+        if ($this->_dState === self::SERIAL_DEVICE_NOTSET) {
             throw new Exception("The device must be set before to be open");
             return false;
         }
@@ -145,7 +145,7 @@ class Ilib_SerialPort
 
         if ($this->_dHandle !== false) {
             stream_set_blocking($this->_dHandle, 0);
-            $this->_dState = SERIAL_DEVICE_OPENED;
+            $this->_dState = self::SERIAL_DEVICE_OPENED;
             return true;
         }
 
@@ -160,13 +160,13 @@ class Ilib_SerialPort
      */
     public function deviceClose()
     {
-        if ($this->_dState !== SERIAL_DEVICE_OPENED) {
+        if ($this->_dState !== self::SERIAL_DEVICE_OPENED) {
             return true;
         }
 
         if (fclose($this->_dHandle)) {
             $this->_dHandle = null;
-            $this->_dState = SERIAL_DEVICE_SET;
+            $this->_dState = self::SERIAL_DEVICE_SET;
             return true;
         }
 
@@ -184,7 +184,7 @@ class Ilib_SerialPort
      */
     public function confBaudRate($rate)
     {
-        if ($this->_dState !== SERIAL_DEVICE_SET) {
+        if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set the baud rate : the device is either not set or opened");
         }
 
@@ -227,7 +227,7 @@ class Ilib_SerialPort
      */
     public function confParity($parity)
     {
-        if ($this->_dState !== SERIAL_DEVICE_SET) {
+        if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set parity : the device is either not set or opened");
         }
 
@@ -263,7 +263,7 @@ class Ilib_SerialPort
      */
     public function confCharacterLength ($int)
     {
-        if ($this->_dState !== SERIAL_DEVICE_SET) {
+        if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set length of a character : the device is either not set or opened");
         }
 
@@ -297,7 +297,7 @@ class Ilib_SerialPort
      */
     public function confStopBits($length)
     {
-        if ($this->_dState !== SERIAL_DEVICE_SET) {
+        if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set the length of a stop bit : the device is either not set or opened");
         }
 
@@ -330,7 +330,7 @@ class Ilib_SerialPort
      */
     public function confFlowControl($mode)
     {
-        if ($this->_dState !== SERIAL_DEVICE_SET) {
+        if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set flow control mode : the device is either not set or opened");
         }
 
@@ -414,7 +414,7 @@ class Ilib_SerialPort
      */
     public function readPort($count = 0)
     {
-        if ($this->_dState !== SERIAL_DEVICE_OPENED) {
+        if ($this->_dState !== self::SERIAL_DEVICE_OPENED) {
             throw new Exception("Device must be opened to read it");
         }
 
@@ -474,7 +474,7 @@ class Ilib_SerialPort
      */
     private function _ckOpened()
     {
-        if ($this->_dState !== SERIAL_DEVICE_OPENED) {
+        if ($this->_dState !== self::SERIAL_DEVICE_OPENED) {
             throw new Exception("Device must be opened");
         }
 

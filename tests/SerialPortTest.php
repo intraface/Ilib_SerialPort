@@ -67,32 +67,38 @@ class SerialPortTest extends PHPUnit_Framework_TestCase
 
     function testConfBaudRate()
     {
-        $this->port->confBaudRate();
+        $rate = NULL;
+        $this->port->confBaudRate($rate);
     }
 
     function testConfParity()
     {
-        $this->port->confParity();
+        $parity = NULL;
+        $this->port->confParity($parity);
     }
 
     function testConfCharacterLength()
     {
-        $this->port->confCharacterLength();
+        $length = NULL;
+        $this->port->confCharacterLength($length);
     }
 
     function testConfStopBits()
     {
-        $this->port->confStopBits();
+        $bits = NULL;
+        $this->port->confStopBits($bits);
     }
 
     function testConfFlowControl()
     {
-        $this->port->confFlowControl();
+        $flow = NULL;
+        $this->port->confFlowControl($flow);
     }
 
     function testSetSetserialFlag()
     {
-        $this->port->setSetserialFlag();
+        $flag = NULL;
+        $this->port->setSetserialFlag($flag);
     }
 
     function testReadPort()
@@ -102,7 +108,8 @@ class SerialPortTest extends PHPUnit_Framework_TestCase
 
     function testSendMessage()
     {
-        $this->port->sendMessage();
+        $message = NULL;
+        $this->port->sendMessage($message);
     }
 
     function testflush()
