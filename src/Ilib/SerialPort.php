@@ -2,16 +2,16 @@
 /**
  * Serial port control class
  *
- * Port to PHP5 of phpSerial found on http://www.phpclasses.org/browse/file/17926.html
- * authored by Rémy Sanchez <thenux@gmail.com>.
+ * Port to PHP5 of phpSerial originally authored by Rémy Sanchez.
+ *
+ * @link   http://github.com/intraface/Ilib_SerialPort
+ * @link   http://code.google.com/p/php-serial/
+ * @package Ilib_SerialPort
+ * @author  Rémy Sanchez <thenux@gmail.com>
+ * @author  Lars Olesen <lars@legestue.net>
+ * @license GPL 2 licence
  *
  * PHP version 5
- *
- * @package   Ilib_SerialPort
- * @author    Rémy Sanchez <thenux@gmail.com>
- * @author    Lars Olesen <lars@legestue.net>
- * @copyright GPL 2 licence
- * @link
  */
 
 /**
@@ -66,7 +66,7 @@ class Ilib_SerialPort
 
         if (substr($sysname, 0, 5) === "Linux") {
             $this->_os = "linux";
-            if($this->_exec("stty --version") === 0) {
+            if ($this->_exec("stty --version") === 0) {
                 register_shutdown_function(array($this, "deviceClose"));
             } else {
                 trigger_error("No stty availible, unable to run.", E_USER_ERROR);
@@ -219,7 +219,7 @@ class Ilib_SerialPort
             }
 
             if ($ret !== 0) {
-                trigger_error ("Unable to set baud rate: " . $out[1], E_USER_WARNING);
+                trigger_error("Unable to set baud rate: " . $out[1], E_USER_WARNING);
                 return false;
             }
         }
@@ -387,7 +387,7 @@ class Ilib_SerialPort
      *  -> Only use it if you need it
      *
      * @param string $param parameter name
-     * @param string $arg parameter value
+     * @param string $arg   parameter value
      *
      * @return bool
      */
@@ -413,7 +413,7 @@ class Ilib_SerialPort
     /**
      * Sends a string to the device
      *
-     * @param string $str string to be sent to the device
+     * @param string $str         string to be sent to the device
      * @param float $waitForReply time to wait for the reply (in seconds)
      */
     public function sendMessage($str, $waitForReply = 0.1)
@@ -493,6 +493,8 @@ class Ilib_SerialPort
 
     /**
      * Checks if serial port is opened
+     *
+     * @return boolean
      */
     private function _ckOpened()
     {
