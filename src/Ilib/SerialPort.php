@@ -69,13 +69,13 @@ class Ilib_SerialPort
             if($this->_exec("stty --version") === 0) {
                 register_shutdown_function(array($this, "deviceClose"));
             } else {
-                trigger_error("No stty availible, unable to run.", E_USER_ERROR);
+                throw new Exception("No stty availible, unable to run.");
             }
         } elseif (substr($sysname, 0, 7) === "Windows") {
             $this->_os = "windows";
             register_shutdown_function(array($this, "deviceClose"));
         } else {
-            trigger_error("Host OS is neither linux nor windows, unable tu run.", E_USER_ERROR);
+            throw new Exception("Host OS is neither linux nor windows, unable to run.");
             exit();
         }
     }
@@ -112,11 +112,9 @@ class Ilib_SerialPort
                 }
             }
 
-            trigger_error("Specified serial port is not valid", E_USER_WARNING);
-            return false;
+            throw new Exception("Specified serial port is not valid");
         } else {
-            trigger_error("You must close your device before to set an other one", E_USER_WARNING);
-            return false;
+            throw new Exception("You must close your device before to set an other one");
         }
     }
 
@@ -130,17 +128,16 @@ class Ilib_SerialPort
     public function deviceOpen($mode = "r+b")
     {
         if ($this->_dState === SERIAL_DEVICE_OPENED) {
-            trigger_error("The device is already opened", E_USER_NOTICE);
-            return true;
+            throw new Exeption("The device is already opened");
         }
 
         if ($this->_dState === SERIAL_DEVICE_NOTSET) {
-            trigger_error("The device must be set before to be open", E_USER_WARNING);
+            throw new Exception("The device must be set before to be open");
             return false;
         }
 
         if (!preg_match("@^[raw]\+?b?$@", $mode)) {
-            trigger_error("Invalid opening mode : ".$mode.". Use fopen() modes.", E_USER_WARNING);
+            throw new Exception("Invalid opening mode : ".$mode.". Use fopen() modes.");
             return false;
         }
 
@@ -153,8 +150,7 @@ class Ilib_SerialPort
         }
 
         $this->_dHandle = null;
-        trigger_error("Unable to open the device", E_USER_WARNING);
-        return false;
+        throw new Exception("Unable to open the device");
     }
 
     /**
@@ -174,8 +170,7 @@ class Ilib_SerialPort
             return true;
         }
 
-        trigger_error("Unable to close the device", E_USER_ERROR);
-        return false;
+        throw new Exception("Unable to close the device");
     }
 
     /**
@@ -190,8 +185,7 @@ class Ilib_SerialPort
     public function confBaudRate($rate)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set the baud rate : the device is either not set or opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Unable to set the baud rate : the device is either not set or opened");
         }
 
         $validBauds = array (
@@ -219,8 +213,7 @@ class Ilib_SerialPort
             }
 
             if ($ret !== 0) {
-                trigger_error ("Unable to set baud rate: " . $out[1], E_USER_WARNING);
-                return false;
+                throw new Exception("Unable to set baud rate: " . $out[1]);
             }
         }
     }
@@ -235,8 +228,7 @@ class Ilib_SerialPort
     public function confParity($parity)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set parity : the device is either not set or opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Unable to set parity : the device is either not set or opened");
         }
 
         $args = array(
@@ -246,8 +238,7 @@ class Ilib_SerialPort
         );
 
         if (!isset($args[$parity])) {
-            trigger_error("Parity mode not supported", E_USER_WARNING);
-            return false;
+            throw new Exception("Parity mode not supported");
         }
 
         if ($this->_os === "linux") {
@@ -260,8 +251,7 @@ class Ilib_SerialPort
             return true;
         }
 
-        trigger_error("Unable to set parity : " . $out[1], E_USER_WARNING);
-        return false;
+        throw new Exception("Unable to set parity : " . $out[1]);
     }
 
     /**
@@ -274,8 +264,7 @@ class Ilib_SerialPort
     public function confCharacterLength ($int)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set length of a character : the device is either not set or opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Unable to set length of a character : the device is either not set or opened");
         }
 
         $int = (int) $int;
@@ -295,8 +284,7 @@ class Ilib_SerialPort
             return true;
         }
 
-        trigger_error("Unable to set character length : " .$out[1], E_USER_WARNING);
-        return false;
+        throw new Exception("Unable to set character length : " .$out[1]);
     }
 
     /**
@@ -307,16 +295,14 @@ class Ilib_SerialPort
      *
      * @return bool
      */
-    public function confStopBits ($length)
+    public function confStopBits($length)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set the length of a stop bit : the device is either not set or opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Unable to set the length of a stop bit : the device is either not set or opened");
         }
 
         if ($length != 1 and $length != 2 and $length != 1.5 and !($length == 1.5 and $this->_os === "linux")) {
-            trigger_error("Specified stop bit length is invalid", E_USER_WARNING);
-            return false;
+            throw new Exception("Specified stop bit length is invalid");
         }
 
         if ($this->_os === "linux") {
@@ -329,8 +315,7 @@ class Ilib_SerialPort
             return true;
         }
 
-        trigger_error("Unable to set stop bit length : " . $out[1], E_USER_WARNING);
-        return false;
+        throw new Exception("Unable to set stop bit length : " . $out[1]);
     }
 
     /**
@@ -346,8 +331,7 @@ class Ilib_SerialPort
     public function confFlowControl($mode)
     {
         if ($this->_dState !== SERIAL_DEVICE_SET) {
-            trigger_error("Unable to set flow control mode : the device is either not set or opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Unable to set flow control mode : the device is either not set or opened");
         }
 
         $linuxModes = array(
@@ -362,8 +346,7 @@ class Ilib_SerialPort
         );
 
         if ($mode !== "none" and $mode !== "rts/cts" and $mode !== "xon/xoff") {
-            trigger_error("Invalid flow control mode specified", E_USER_ERROR);
-            return false;
+            throw new Exception("Invalid flow control mode specified");
         }
 
         if ($this->_os === "linux") {
@@ -375,8 +358,7 @@ class Ilib_SerialPort
         if ($ret === 0) {
             return true;
         } else {
-            trigger_error("Unable to set flow control : " . $out[1], E_USER_ERROR);
-            return false;
+            throw new Exception("Unable to set flow control : " . $out[1]);
         }
     }
 
@@ -400,11 +382,9 @@ class Ilib_SerialPort
         $return = exec ("setserial " . $this->_device . " " . $param . " " . $arg . " 2>&1");
 
         if ($return{0} === "I") {
-            trigger_error("setserial: Invalid flag", E_USER_WARNING);
-            return false;
+            throw new Exception("setserial: Invalid flag");
         } elseif ($return{0} === "/") {
-            trigger_error("setserial: Error with device file", E_USER_WARNING);
-            return false;
+            throw new Exception("setserial: Error with device file");
         } else {
             return true;
         }
@@ -435,8 +415,7 @@ class Ilib_SerialPort
     public function readPort($count = 0)
     {
         if ($this->_dState !== SERIAL_DEVICE_OPENED) {
-            trigger_error("Device must be opened to read it", E_USER_WARNING);
-            return false;
+            throw new Exception("Device must be opened to read it");
         }
 
         if ($this->_os === "linux") {
@@ -458,7 +437,7 @@ class Ilib_SerialPort
 
             return $content;
         } elseif ($this->_os === "windows") {
-            /* So fare only implemented without possible to set count. */
+            // So far only implemented without possible to set count.
             $content = ''; $i = 0;
             do {
                 $content .= fread($this->_dHandle, 128);
@@ -486,8 +465,7 @@ class Ilib_SerialPort
             return true;
         } else {
             $this->_buffer = "";
-            trigger_error("Error while sending message", E_USER_WARNING);
-            return false;
+            throw new Exception("Error while sending message");
         }
     }
 
@@ -497,8 +475,7 @@ class Ilib_SerialPort
     private function _ckOpened()
     {
         if ($this->_dState !== SERIAL_DEVICE_OPENED) {
-            trigger_error("Device must be opened", E_USER_WARNING);
-            return false;
+            throw new Exception("Device must be opened");
         }
 
         return true;
@@ -512,8 +489,7 @@ class Ilib_SerialPort
     protected function _ckClosed()
     {
         if ($this->_dState !== SERIAL_DEVICE_CLOSED) {
-            trigger_error("Device must be closed", E_USER_WARNING);
-            return false;
+            throw new Exception("Device must be closed");
         }
 
         return true;
