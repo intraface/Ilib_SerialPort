@@ -133,12 +133,10 @@ class Ilib_SerialPort
 
         if ($this->_dState === self::SERIAL_DEVICE_NOTSET) {
             throw new Exception("The device must be set before to be open");
-            return false;
         }
 
         if (!preg_match("@^[raw]\+?b?$@", $mode)) {
             throw new Exception("Invalid opening mode : ".$mode.". Use fopen() modes.");
-            return false;
         }
 
         $this->_dHandle = @fopen($this->_device, $mode);
