@@ -29,92 +29,95 @@ require_once dirname(__FILE__) . '/../src//Ilib/SerialPort.php';
  */
 class SerialPortTest extends PHPUnit_Framework_TestCase
 {
-    private $port;
-    function setUp()
+    function getDevice()
     {
-        $this->port = new Ilib_SerialPort();
+        return new Ilib_SerialPort();
     }
 
-    function tearDown()
+    protected function getSetDevice()
     {
-        unset($this->port);
-    } 
+        $port = $this->getDevice();
+        try {
+            return $port->deviceSet('/dev/ttyS0');
+        } catch (Exception $e) {
+            $this->markTestSkipped('Cannot set any device');
+        }
+    }
 
     function testConstructionWorksWithNoArguments()
     {
-        $this->assertTrue(is_object($this->port));
+        $this->assertTrue(is_object($this->getDevice()));
     }
 
     function testDeviceSetThrowsExceptionWhenInvalidPortIsSet()
     {
         try {
-            $this->port->deviceSet('INVALID');
+            $this->getDevice()->deviceSet('INVALID');
         } catch (Exception $e) {
             return;
         }
         $this->fail('An exception should have been raised');
     }
-    
+
     function testDeviceOpen()
     {
-        $this->port->deviceOpen();
-    }   
+        $this->getSetDevice()->deviceOpen();
+    }
 
     function testDeviceClose()
     {
-        $this->port->deviceClose();
-    }   
+        $this->getSetDevice()->deviceClose();
+    }
 
     function testConfBaudRate()
     {
-        $rate = NULL;
-        $this->port->confBaudRate($rate);
+        $rate = null;
+        $this->getSetDevice()->confBaudRate($rate);
     }
 
     function testConfParity()
     {
-        $parity = NULL;
-        $this->port->confParity($parity);
+        $parity = null;
+        $this->getSetDevice()->confParity($parity);
     }
 
     function testConfCharacterLength()
     {
-        $length = NULL;
-        $this->port->confCharacterLength($length);
+        $length = null;
+        $this->getSetDevice()->confCharacterLength($length);
     }
 
     function testConfStopBits()
     {
-        $bits = NULL;
-        $this->port->confStopBits($bits);
+        $bits = null;
+        $this->getSetDevice()->confStopBits($bits);
     }
 
     function testConfFlowControl()
     {
-        $flow = NULL;
-        $this->port->confFlowControl($flow);
+        $flow = null;
+        $this->getSetDevice()->confFlowControl($flow);
     }
 
     function testSetSetserialFlag()
     {
-        $flag = NULL;
-        $this->port->setSetserialFlag($flag);
+        $flag = null;
+        $this->getSetDevice()->setSetserialFlag($flag);
     }
 
     function testReadPort()
     {
-        $this->port->readPort();
+        $this->getSetDevice()->readPort();
     }
 
     function testSendMessage()
     {
-        $message = NULL;
-        $this->port->sendMessage($message);
+        $message = null;
+        $this->getSetDevice()->sendMessage($message);
     }
 
     function testflush()
     {
-        $this->port->flush();
+        $this->getSetDevice()->flush();
     }
 }
-

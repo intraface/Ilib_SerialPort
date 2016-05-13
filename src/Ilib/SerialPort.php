@@ -258,7 +258,7 @@ class Ilib_SerialPort
      *
      * @return bool
      */
-    public function confCharacterLength ($int)
+    public function confCharacterLength($int)
     {
         if ($this->_dState !== self::SERIAL_DEVICE_SET) {
             throw new Exception("Unable to set length of a character : the device is either not set or opened");
@@ -370,13 +370,13 @@ class Ilib_SerialPort
      *
      * @return bool
      */
-    public function setSetserialFlag ($param, $arg = "")
+    public function setSetserialFlag($param, $arg = "")
     {
         if (!$this->_ckOpened()) {
             return false;
         }
 
-        $return = exec ("setserial " . $this->_device . " " . $param . " " . $arg . " 2>&1");
+        $return = exec("setserial " . $this->_device . " " . $param . " " . $arg . " 2>&1");
 
         if ($return{0} === "I") {
             throw new Exception("setserial: Invalid flag");
@@ -397,7 +397,9 @@ class Ilib_SerialPort
     {
         $this->_buffer .= $str;
 
-        if ($this->autoflush === true) $this->flush();
+        if ($this->autoflush === true) {
+            $this->flush();
+        }
 
         usleep((int) ($waitForReply * 1000000));
     }
@@ -416,7 +418,8 @@ class Ilib_SerialPort
         }
 
         if ($this->_os === "linux") {
-            $content = ""; $i = 0;
+            $content = "";
+            $i = 0;
 
             if ($count !== 0) {
                 do {
@@ -435,7 +438,8 @@ class Ilib_SerialPort
             return $content;
         } elseif ($this->_os === "windows") {
             // So far only implemented without possible to set count.
-            $content = ''; $i = 0;
+            $content = '';
+            $i = 0;
             do {
                 $content .= fread($this->_dHandle, 128);
             } while (($i += 128) === strlen($content));

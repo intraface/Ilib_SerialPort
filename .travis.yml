@@ -9,7 +9,7 @@ php:
 before_script:
   - travis_retry composer self-update && composer --version
   - travis_retry composer install
-script: 
-  - ./vendor/bin/phpunit --coverage-text ./tests 
-  - ./vendor/bin/phpcs --standard=PSR2 src
+script:
+  - ./vendor/bin/phpunit --coverage-text ./tests
+  - ./vendor/bin/phpcs src
 
